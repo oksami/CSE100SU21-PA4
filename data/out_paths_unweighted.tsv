@@ -1,0 +1,6 @@
+(actor)--[movie#@year]-->(actor)--...
+(Robert Downey Jr.)--[Avengers: Age of Ultron#@2015]-->(Chris Evans)
+(Amy Adams)--[Leap Year#@2010]-->(Matthew Goode)--[Stoker#@2013]-->(Nicole Kidman)
+(Will Smith)--[Concussion#@2015]-->(Alec Baldwin)--[Mercury Rising#@1998]-->(Bruce Willis)
+(James McAvoy)--[X-Men: First Class#@2011]-->(Michael Fassbender)
+(Djimon Hounsou)--[Amistad#@1997]-->(Morgan Freeman)--[London Has Fallen#@2016]-->(Gerard Butler)--[Den of Thieves#@2018]-->(50 Cent)
