@@ -4,7 +4,7 @@
 
 #ifndef ACTORGRAPH_HPP
 #define ACTORGRAPH_HPP
-
+#include <unordered_map>
 #include <iostream>
 #include <vector>
 
@@ -16,11 +16,12 @@ using namespace std;
 class ActorGraph {
   protected:
     // TODO: add data structures used in actor graph
+    unordered_map<string, vertex*> vertexMap;                     //to be able to search for existing actors and their corresponding vertices
+    unordered_map<pair<string, int>, vector<string>> casts;    //pair<movie, year> and list of actors
 
   public:
     /* TODO */
     ActorGraph();
-
     /* TODO */
     bool buildGraphFromFile(const char* filename);
 
