@@ -8,9 +8,10 @@
 #include <sstream>
 #include <string>
 #include <unordered_map>
-#include <limits>
+#include <limits.h>
 #include <vector>
 #include <queue>
+#include <string.h>
 
 using namespace std;
 
@@ -19,21 +20,19 @@ struct vertex{
     unordered_map <string,edge*> adj;   //adjacency list OF CONNECTIONS/ moonlighting as list of nodes to which there are edges; the edges are metaphysical
     int dist;           //distance from source
     int index;          //index of vertex
-    int prev;           //index of previous vertex in path
+    vertex* prev;           //pointer of previous vertex in path
     vertex(string name): name(name) {};
 };
 
 struct edge{
     vertex actor;
     int year;
+    edge(vertex* actor, int year){};
 };
 
 /* TODO */
 ActorGraph::ActorGraph() {}
 
-vector<vertex*> createGraph(){
-
-}
 
 /* Build the actor graph from dataset file.
  * Each line of the dataset file must be formatted as:
@@ -85,6 +84,23 @@ bool ActorGraph::buildGraphFromFile(const char* filename) {
         casts[movie].insert(actor);
     }
 
+    //loop through casts for each movie and create edges between each actor
+    for(auto it = casts.begin(); it!=casts.end(); it++){    //iterates through casts
+        for (auto actor1=it->second.begin(); actor1!=it->second.end(); actor1++) {      //iterates through all actors for each movie
+            for (auto actor2=it->second.begin(); actor2!=it->second.end(); actor2++) {  //adds each actor to each others adjacency list
+                if (actor1 != actor2){
+                    edge* ed = new edge(vertexMap[actor2], it->first->second);
+                    vertexMap[actor1]->adj[vertexMap[actor2]->name] = ed;
+                }
+            }
+        }
+    }
+
+    //add each vertex to a vector
+    for(auto it = vertexMap.begin(); it!=vertexMap.end(); it++){
+            graph.push_back(it->second);
+    }
+
     // if failed to read the file, clear the graph and return
     if (!infile.eof()) {
         cerr << "Failed to read " << filename << endl;
@@ -97,7 +113,32 @@ bool ActorGraph::buildGraphFromFile(const char* filename) {
 
 /* TODO */
 void ActorGraph::BFS(const string& fromActor, const string& toActor,
-                     string& shortestPath) {}
+                     string& shortestPath) {
+    queue<vertex*> toExplore;
+    vertex* start = vertexMap[fromActor];
+    start->dist = 0;
+    toExplore.push(start);
+    while( !toExplore.empty() ){
+        vertex* next = toExplore.front();
+        toExplore.pop();
+        for(auto it = next->adj.start(); it != next->adj.end(); ++it){
+            vertex* neighbor = vertexMap[*it];
+            if(neighbor->dist == INT_MAX){
+                neighbor->dist = next->dist+1;
+                neighbor->prev = next->index;
+                toExplore.push(neighbor);
+            }
+        }
+    }
+    vertex* v = vertexMap[toActor];
+    while (v->name != fromActor){
+        shortestPath += "(" + v->name + ")--";
+        v = v->prev;
+        shortestPath += "[" + v->prev->adj[v->name]->title + "@" + v->prev->adj[v->name]->year + "]--";
+        v = v->prev;
+    }
+    shortestPath += fromActor;
+}
 
 /* TODO */
 void Dijkstra(const string& fromActor, const string& toActor,
