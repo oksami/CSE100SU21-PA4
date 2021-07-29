@@ -17,7 +17,9 @@ class ActorGraph {
   protected:
     // TODO: add data structures used in actor graph
     unordered_map<string, vertex*> vertexMap;                     //to be able to search for existing actors and their corresponding vertices
-    unordered_map<pair<string, int>, vector<string>> casts;    //pair<movie, year> and list of actors
+    unordered_map< pair<string, int>, vector<string> > casts;    //pair<movie, year> and list of actors
+    vector <vertex*> graph;
+    bool weighted;
 
   public:
     /* TODO */
